@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+
+const products = [
+  {
+    title: "PrecisionClimate™ Forecasts",
+    description: "Ultra-high resolution weather forecasts with spatial resolution up to 1 km.",
+    aiUtilization: "Deep Learning Spatial Refinement: AI models process large datasets to enhance spatial resolution and accuracy.",
+    monetization: "Tiered Subscription Model"
+  },
+  {
+    title: "InstantWeather™ Alerts",
+    description: "Immediate, up-to-the-minute weather data and alerts.",
+    aiUtilization: "Real-Time Anomaly Detection: Machine learning algorithms analyze streaming data to detect sudden weather changes.",
+    monetization: "Usage-Based Pricing"
+  },
+  {
+    title: "FutureClimate™ Outlook",
+    description: "Seasonal and subseasonal forecasts using deep learning models.",
+    aiUtilization: "Temporal Pattern Analysis: RNNs and LSTM networks for accurate long-term climate projections.",
+    monetization: "Annual Licensing"
+  },
+  {
+    title: "TailoredWeather™ Solutions",
+    description: "Bespoke weather data packages tailored to specific client needs.",
+    aiUtilization: "Personalized Forecast Generation: Machine learning algorithms generate customized weather reports and indices.",
+    monetization: "Custom Project-Based Pricing"
+  },
+  {
+    title: "AtmoSphere™ Insights",
+    description: "Raw and processed data directly from the advanced meteorological sounder package.",
+    aiUtilization: "Enhanced Satellite Data Interpretation: AI improves accuracy of temperature and humidity profiles.",
+    monetization: "API Access with Tiered Pricing"
+  },
+  {
+    title: "WeatherIntelligence™ Suite",
+    description: "Sophisticated analytics and predictive models built on the satellite data.",
+    aiUtilization: "Comprehensive Predictive Modelling: AI-driven analytics for deeper insights and accurate forecasts.",
+    monetization: "SaaS (Software as a Service) Model"
+  },
+  {
+    title: "ClimateLegacy™ Archive",
+    description: "Comprehensive database of historical weather data collected by the satellite.",
+    aiUtilization: "Pattern Recognition in Historical Data: Machine learning algorithms identify historical patterns and trends.",
+    monetization: "Data Licensing + Query-Based Pricing"
+  },
+  {
+    title: "StormSentry™ Forecast",
+    description: "Specialized forecasts and risk assessments for severe weather events.",
+    aiUtilization: "Extreme Weather Event Prediction: AI models analyze patterns to improve accuracy of risk assessments.",
+    monetization: "Retainer + Event-Based Pricing"
+  },
+  {
+    title: "AgroClimate™ Advisor",
+    description: "Tailored weather products for the agricultural sector.",
+    aiUtilization: "Agricultural Optimization Models: Machine learning models analyze weather data for crop-specific insights.",
+    monetization: "Seasonal Subscription + Per-Acre Pricing"
+  },
+  {
+    title: "PowerCast™ Predictor",
+    description: "Specialized weather forecasts and tools for the energy sector.",
+    aiUtilization: "Energy Demand Forecasting: AI enhances predictions for solar irradiance, wind energy, and energy demand.",
+    monetization: "Value-Based Pricing"
+  }
+];
+
+export default function WeatherProductsChart() {
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortColumn) {
+      if (a[sortColumn] < b[sortColumn]) return sortDirection === 'asc' ? -1 : 1;
+      if (a[sortColumn] > b[sortColumn]) return sortDirection === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  return (
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow>
+          {['title', 'description', 'aiUtilization', 'monetization'].map((column) => (
+            <TableHead key={column} className="text-left">
+              <Button 
+                variant="ghost" 
+                onClick={() => handleSort(column)}
+                className="font-bold"
+              >
+                {column.charAt(0).toUpperCase() + column.slice(1)}
+                {sortColumn === column && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+              </Button>
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {sortedProducts.map((product, index) => (
+          <TableRow key={index}>
+            <TableCell>{product.title}</TableCell>
+            <TableCell>{product.description}</TableCell>
+            <TableCell>{product.aiUtilization}</TableCell>
+            <TableCell>{product.monetization}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
